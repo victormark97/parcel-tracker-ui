@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Parcel Tracker UI</title>
+    <style>
+        :root { font-family: Inter, system-ui, Arial; color-scheme: light dark; }
+        body { margin: 0; padding: 0; }
+        .container { max-width: 1000px; margin: 24px auto; padding: 0 16px; }
+        .card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; margin-bottom: 16px; background: #fff; color: #111; }
+        .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .btn { padding: 8px 12px; border: 1px solid #111; border-radius: 8px; background: #111; color: #fff; cursor: pointer; }
+        .btn.ghost { background: transparent; color: #111; }
+        .input, .select { padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 8px; border-bottom: 1px solid #e5e7eb; text-align: left; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+        .tab { padding: 8px 12px; border-radius: 8px; border: 1px solid #e5e7eb; cursor: pointer; background: #f8fafc; }
+        .tab.active { background: #111; color: #fff; border-color: #111; }
+        .muted { color: #64748b; font-size: 12px; }
+        .badge { font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid #e5e7eb; }
+        @media (prefers-color-scheme: dark) {
+          .card { background: #0b0b0b; color: #e5e7eb; border-color: #1f2937; }
+          .btn { border-color: #e5e7eb; background: #e5e7eb; color: #111; }
+          .btn.ghost { color: #e5e7eb; border-color: #374151; }
+          .input, .select { background: #111; color: #e5e7eb; border-color: #374151; }
+          th, td { border-color: #1f2937; }
+          .tab { background: #111; border-color: #1f2937; color: #e5e7eb; }
+          .tab.active { background: #e5e7eb; color: #111; }
+          .badge { border-color: #374151; }
+        }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
