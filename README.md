@@ -44,7 +44,7 @@ allow_origins=["http://localhost:5173"]
 
 Optional seed (backend): ruleaza scriptul de seed din proiectul backend pentru a avea date de test.
 
-# Structura proiect (UI)
+# Structura proiect
 
 ```
 parcel-tracker-ui/
@@ -83,23 +83,40 @@ Erori tratate simplu in UI (toast basic pe pagina); backend intoarce {"detail":"
 
 # Backlog
 
-### Bug fix (usor)
-1.	Timeline: blocheaza Add scan daca ts este in viitor; afiseaza mesaj clar.
+### Bug fix — Timeline (ușor)
+* Scop: interzici adăugarea unui scan cu ts din viitor.
+* Implementare: calculezi const futureTs = new Date(scan.ts) > new Date(); și blochezi acțiunea.
+* Criterii: butonul “Add scan” este dezactivat când futureTs===true; la submit forțat afișezi mesaj vizibil (“Timestamp cannot be in the future.”).
 
-### Imbunatatiri rapide (usor)
-2) Parcels: click pe rand copiaza tracking_code in clipboard + toast „Copied”.
-3) Parcels: afiseaza addr_to si weight_kg (exige expunerea in ParcelOut pe backend).
-4) New Parcel: valideaza client-side addr_from si addr_to (min 3 caractere) si dezactiveaza butonul cand nu sunt valide.
+### Îmbunătățiri rapide (ușor)
+* Parcels — copy on row click:
+  * Implementare: pe <tr> adaugi onClick={() => navigator.clipboard.writeText(p.tracking_code)} + toast (“Copied”).
+  * Criterii: un singur click copiază; feedback textual 1–2 sec, fără reload.
+* Parcels — adauga coloane addr_to, weight_kg:
+  * Backend: adaugi câmpurile în ParcelOut (Pydantic) și le populatezi în endpoint.
+  * Frontend: adaugi două <th> + două <td>; datele apar pentru toate rândurile.
+  * Criterii: valorile sunt afișate corect, fără erori în consolă.
+* New Parcel — validare adrese min 3 caractere:
+  * Implementare: const valid = addr_from.length>=3 && addr_to.length>=3; și disabled={!valid} pe “Create”.
+  * Criterii: butonul devine activ doar când câmpurile sunt valide; mesaj sub input când invalid.
 
-### Functionalitati medii
-5) Paginare: adauga butoane Prev/Next care modifica page si refac fetch-ul (pastreaza size).
-6) Filtru multi-status (checkbox-uri) si trimitere fie ca multiple apeluri, fie ca parametru combinat daca adaugi suport in backend.
-7) „New Customer” intr-un dialog: POST /customers, apoi re-incarca lista de clienti in formularul „New Parcel”.
+### Funcționalități medii
+* Paginare Parcels:
+  * Stare: page în componentă; butoane Prev/Next modifică page și refac fetch-ul cu api.listParcels({ page, size }).
+  * Criterii: Prev este dezactivat la page===1; schimbarea paginii nu resetează filtrele curente.
+* Filtru multi-status:
+  * UI: listă de checkbox-uri pentru fiecare status; selectedStatuses: string[].
+  * Variante:
+  * Fără backend nou: faci mai multe GET-uri (câte unul per status) și unești rezultatele (eliminând duplicatele după id).
+  * Cu backend nou: accepți status=...&status=... (sau status=a,b) și trimiți o singură cerere.
+  * Criterii: tabelul reflectă exact selecția; niciun warning în consolă.
+* “New Customer” dialog:
+  * UI: formular mic (name, phone) într-un modal simplu; api.createCustomer(payload) pe submit.
+  * Refresh: la succes, adaugi clientul nou în lista din NewParcelPage (fără reload de pagină).
+  * Criterii: clientul apare imediat în `<select>`; mesaj de confirmare; tratezi 4xx cu mesaj clar.
 
-### Functionalitati avansate
-8) Banner global pentru erori si „loading” global (un singur loc).
-9) Persistenta preferintelor UI in localStorage (tab curent, filtre).
-10) Timeline: afiseaza harta statica (placeholder) si simuleaza coordonate pentru location.
+### Functionalitate avansate
+* TimelinePage: afiseaza harta statica si simuleaza coordonate pentru locatia fiecarei scanari.
 
 ### Integrare cu backend (optional)
 11) GET /parcels/{code}/summary (durata totala intre scan-uri) si afisare sub timeline.
